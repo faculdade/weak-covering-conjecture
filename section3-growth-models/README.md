@@ -24,9 +24,11 @@ Table 2 of the paper:
 | slow-linear | 2 | 0.000 | 0.000 | 0.2837 |
 
 The script also prints the regressor correlations (all at least 0.993), the slope confidence
-intervals, and the plateau test: 1 plateau in the 22 increments `l=1..23` against
-`Bin(22, 0.2053)` gives `p=0.0426`, and the same test on the 13 increments of the tail `l=10..23`
-gives `p=0.2199`. Both figures appear in Section 3.
+intervals, and binomial plateau-test diagnostics against both the full range and the tail, as
+exploratory output; the paper itself no longer reports either binomial p-value (Round 10: the tail
+increment total, `j*(23)-j*(10)=27-15=12`, falls outside the `{10,11}` any constant-rounding model
+can produce over 13 steps, a deterministic refutation stated directly in Section 3 instead of a
+probability against a null already impossible on its own terms).
 
 `e(l)` is a deterministic sequence, so these statistics compare fit and extrapolation quality.
 They do not carry the sampling interpretation of an inference over noisy data, and the script
