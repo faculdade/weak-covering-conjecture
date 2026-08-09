@@ -64,3 +64,18 @@ so the interval reproduces exactly.
 The second checks that an FFT followed by an inverse FFT recovers all 387,420,489 integer hit
 counts (maximum real error `2.8e-14`, zero rounding mismatches) and reports `max/RMS = 19.9746`
 against a Gaussian-phase heuristic of `6.3982`.
+
+## Local intensity of the last holdouts
+
+```
+python3 local_intensity.py            # l=10..14, under a minute
+python3 local_intensity.py --with15   # adds l=15, roughly 10-15 minutes (T=17,672,631,900)
+```
+
+For each residue z, the depth-c cell is its class modulo `3^c`, and the depth-c local intensity
+`lambda_c(z)` is the total exact hit count within that class divided by `3^(l-c)` (the class
+size). A non-homogeneous Poisson model fit to that intensity gives z hole probability
+`exp(-lambda_c(z))`. Run against the exact last-holdout set `H(l,j*(l)-1)`, l=10..15, at depths
+`c=8,9,10`, every one of the eleven holdouts has `lambda_c` from `2.0` to `108.4` (hole probability
+`e^-2` to `e^-108`), against a global occupancy mean in the thousands over the same levels: every
+holdout sits in a systematically low-intensity cell, at every depth checked.
