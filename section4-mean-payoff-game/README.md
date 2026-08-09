@@ -1,10 +1,10 @@
-# Section 4: the mean-payoff-game bound (Table 3, Theorem 3, Corollary 4)
+# Section 4: the mean-payoff-game bound (Table 3, Theorem 4, Corollary 5)
 
 The window-`k` relaxation of the covering budget is a mean-payoff game on the `2*3^(k-1)` unit
 states modulo `3^k`. Its value `rho_k` gives `j*(l) <= rho_k * l + C_k`. At `k=14`,
-`rho_14 = 9/8`, which is Corollary 4.
+`rho_14 = 9/8`, which is Corollary 5.
 
-Theorem 3 does not need the game's theory. It needs, for each `k`, one policy `sigma`, one value
+Theorem 4 does not need the game's theory. It needs, for each `k`, one policy `sigma`, one value
 `rho_k`, and one potential `h` satisfying
 
 ```
@@ -52,7 +52,7 @@ about 76 minutes, `k=13` about 5.5 hours. `k=14` was run once, overnight.
 python3 mpg.py 3 4 5
 ```
 
-## Empirical Result 2 and the policy cross-check
+## Empirical Result 3 and the policy cross-check
 
 ```
 python3 step_a_grounding.py     # about 30 seconds
@@ -60,7 +60,7 @@ python3 step_a_grounding.py     # about 30 seconds
 
 reproduces `j*(l)` from the full-precision game against direct brute-force enumeration of
 `R_{j-1,j}` for `l=1..6`, and against the known table for `l=1..12`. That is the evidence behind
-Empirical Result 2, on which Theorem 3 is conditional.
+Empirical Result 3, on which Theorem 4 is conditional.
 
 ```
 python3 verify_on_real.py       # about 1 minute
