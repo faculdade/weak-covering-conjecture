@@ -1,6 +1,6 @@
-# Section 7: `maxrun(H(l,l+1))` through `l=22` (Proposition 21)
+# Section 7: `maxrun(H(l,l+1))` through `l=22` (Proposition 22)
 
-Proposition 21 says that if `maxrun(H(l,l+1))` is bounded by `C` for all `l`, then
+Proposition 22 says that if `maxrun(H(l,l+1))` is bounded by `C` for all `l`, then
 `j*(l) <= l + C + 1`. This is the exact computation of that quantity, level by level.
 
 `maxrun(S)` is the length of the longest doubling chain `x, 2x, ..., 2^(t-1)x` inside `S`, all

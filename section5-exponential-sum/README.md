@@ -13,6 +13,19 @@ one FFT then gives the whole spectrum. Both scripts here check the histogram mas
 
 `g++` is required. The helper is compiled on first use.
 
+## The full-spectrum criterion is unreachable
+
+```
+python3 unreachable_criterion.py     # under a second
+```
+
+Every element of `R_{j,k}` is a unit modulo 3 (no term below the top carries a positive power of
+3), so `N(0)=0` and `sum_{t!=0} S(t) = -T` exactly; the triangle inequality then forces
+`sum_{t!=0} |S(t)| >= T` always, so the naive positivity criterion `sum_{t!=0}|S(t)| < T` can never
+hold. The script checks the exact identity directly (no FFT) at six small `(l,j,k)`, plus the
+sharper, localized form `S(3^(l-1)) + S(2*3^(l-1)) = -T` that the paper's Proposition (Section 5.1)
+uses.
+
 ## The `l=18` mass split
 
 ```

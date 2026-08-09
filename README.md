@@ -9,17 +9,19 @@ The folders follow the paper's section numbers.
 
 | paper claim | folder | command |
 |---|---|---|
+| Lemma 1 (No smaller budget covers) | `section2-jstar-computation/` | `python3 no_smaller_budget.py` |
 | Table 1, `j*(l)` for `l=1..23` | `section2-jstar-computation/` | `jstar-fast run 1 20` |
 | Table 2, AIC/BIC/LOOCV and the plateau test | `section3-growth-models/` | `python3 experiment.py` |
-| Lemma 2 (Grounding), Empirical Result 3 (the game's worst case) | `section4-mean-payoff-game/` | `python3 step_a_grounding.py` |
-| Table 3, `rho_k`/`C_k`; Theorem 4 and Corollary 5 | `section4-mean-payoff-game/` | `python3 verify_certificate.py` |
+| Lemma 3 (Grounding), Empirical Result 4 (the game's worst case) | `section4-mean-payoff-game/` | `python3 step_a_grounding.py` |
+| Table 3, `rho_k`/`C_k`; Theorem 5 and Corollary 6 | `section4-mean-payoff-game/` | `python3 verify_certificate.py` |
+| Proposition 8 (full-spectrum criterion is unreachable) | `section5-exponential-sum/` | `python3 unreachable_criterion.py` |
 | Section 5, the `l=18` exponential sum, the phase scramble, and the local-intensity computation | `section5-exponential-sum/` | `python3 l1_tail.py --l 18`, `python3 local_intensity.py` |
-| Theorem 9, Corollary 10, Corollary 11, Empirical Result 12, Empirical Result 13 | `section6-holdout-structure/` | `python3 verify_witness_maps_and_inclusions.py` |
-| Theorem 16, Proposition 17, Empirical Result 18 | `section6-holdout-structure/` | `python3 near_extinction_forward.py`, `python3 round5_secondary_closure.py` |
-| Proposition 19, Empirical Result 20 (mod-9 law) | `section6-holdout-structure/` | `python3 mod9_class_law.py`, `python3 mod9_containment_proof_check.py` |
-| Lemma 14, Proposition 15, Lemma 22, and the corner-redundancy test of Section 7 | `section6-holdout-structure/` | `python3 round5_width_reformulation.py` |
-| Proposition 23 (corner-redundancy implies tightness) | `section6-holdout-structure/` | `python3 corner_redundancy_tightness.py` |
-| Proposition 21, `maxrun(H(l,l+1))` through `l=22` | `section7-maxrun/` | `h014-maxrun 22 8` |
+| Theorem 10, Corollary 11, Corollary 12, Empirical Result 13, Empirical Result 14 | `section6-holdout-structure/` | `python3 verify_witness_maps_and_inclusions.py` |
+| Theorem 17, Proposition 18, Empirical Result 19 | `section6-holdout-structure/` | `python3 near_extinction_forward.py`, `python3 round5_secondary_closure.py` |
+| Proposition 20, Empirical Result 21 (mod-9 law) | `section6-holdout-structure/` | `python3 mod9_class_law.py`, `python3 mod9_containment_proof_check.py` |
+| Lemma 15, Proposition 16, Lemma 23, and the corner-redundancy test of Section 7 | `section6-holdout-structure/` | `python3 round5_width_reformulation.py` |
+| Proposition 24 (corner-redundancy implies tightness) | `section6-holdout-structure/` | `python3 corner_redundancy_tightness.py` |
+| Proposition 22, `maxrun(H(l,l+1))` through `l=22` | `section7-maxrun/` | `h014-maxrun 22 8` |
 
 Each folder has its own README giving what it checks, how to run it, the output to expect, and
 what the run costs.

@@ -68,6 +68,19 @@ out-of-memory), which is why the table stops at 23.
 not redo a budget already ruled out. Delete that folder for a run from scratch. There is no
 full-state resume: killing the process loses the current attempt.
 
+## Lemma "No smaller budget covers"
+
+```
+python3 no_smaller_budget.py     # 10 seconds, l=2..13
+```
+
+The DP above only tries budgets `j >= l` at level `l` (see `find_j_star`'s `j_start.max(ell)` in
+`src/main.rs`), so on its own it never checks whether some `j < l` could also cover. This script
+enumerates `R_{j-1,j}` directly (a third, independent code path, alongside the DP and
+`bruteforce`) for every `j < l` at each level and confirms none of them cover `(Z/3^l Z)^*`,
+matching the paper's Lemma of the same name, which proves this in general for `l=1,...,23` from a
+reduction argument plus Table 1's own strict rows, not by search.
+
 ## Other binaries
 
 - `jstar-fast size <l> <j>` computes a single image size, useful for testing one budget alone.

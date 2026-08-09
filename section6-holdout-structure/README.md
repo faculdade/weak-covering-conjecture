@@ -7,7 +7,7 @@ reproduce.
 
 Run each with `python3 <script>` from this folder. `numpy` is required.
 
-## Theorem 9, Corollary 10, Empirical Result 12
+## Theorem 10, Corollary 11, Empirical Result 13
 
 ```
 python3 verify_witness_maps_and_inclusions.py      # 4 seconds, l=5..14
@@ -16,8 +16,8 @@ python3 extend_l15_l16.py                          # 33 seconds, l=15,16
 
 Checks the two witness shift maps, the inclusion `H(l,j+1) subset 2H(l,j) cap 4H(l,j)` at every
 budget, and the bootstrap `j*(l) <= j + maxrun(H(l,j))`. At every budget from `l+1` to `j*(l)` the
-bootstrap is not just true but tight, which is Empirical Result 12. The `l=16` case is the sharp
-one: `H(16,19)` has 1182 elements and `maxrun = 1`, so Corollary 10 alone forces coverage at 20.
+bootstrap is not just true but tight, which is Empirical Result 13. The `l=16` case is the sharp
+one: `H(16,19)` has 1182 elements and `maxrun = 1`, so Corollary 11 alone forces coverage at 20.
 
 Larger levels, two independent ways:
 
@@ -29,13 +29,13 @@ python3 holdout_l20.py                             # about 1 hour, 11 GiB, recom
 
 `h013_round5_dump_analysis.py` reads the raw `u64` holdout dumps in `dumps-h013/` (produced by
 `h013_sweep` in `../section2-jstar-computation/`) and `dumps/` (produced by
-`mod9_forcing_analysis.py` here). It confirms the Theorem 9 inclusions and the bootstrap
+`mod9_forcing_analysis.py` here). It confirms the Theorem 10 inclusions and the bootstrap
 tightness up to `l=21`, including `|H(19,20)| = 3,195,464`, the case above three million that
-Empirical Result 12 mentions. The last line, `l=21->22: missing dumps`, is expected: `l=22` was
+Empirical Result 13 mentions. The last line, `l=21->22: missing dumps`, is expected: `l=22` was
 never dumped. `holdout_l19.py` recomputes the `l=19` sets from scratch with a separate numpy
 implementation and gets the same holdout counts and the same maxruns.
 
-## Empirical Result 13, the failure of the cost-1 repair rule
+## Empirical Result 14, the failure of the cost-1 repair rule
 
 ```
 python3 witness_check_6_7.py                       # 9 seconds
@@ -50,7 +50,7 @@ exceed their parent's minimum Durfee depth by more than one, with the excess dis
 `{1: 1392, 3: 9, 5: 52, 7: 5}` and `{1: 4205, 3: 7, 5: 135, 7: 27}`, so the worst case is 7 at
 both transitions and 1 for about 95% of children.
 
-## Theorem 16, Proposition 17, Empirical Result 18, Proposition 19, Empirical Result 20, and the 1547 counterexample
+## Theorem 17, Proposition 18, Empirical Result 19, Proposition 20, Empirical Result 21, and the 1547 counterexample
 
 ```
 python3 near_extinction_forward.py                  # under a second, l=2..7
@@ -60,17 +60,17 @@ python3 round5_secondary_closure.py                # 4 seconds, l=2..14
 python3 mod9_forcing_analysis.py                   # 21 seconds, rewrites dumps/
 ```
 
-`mod9_class_law.py` checks that every element of `H(l, j*(l)-1)` is `1 mod 3` (Theorem 16), that
-the set occupies a single class mod 9 (Proposition 19's containment plus Empirical Result 20's
+`mod9_class_law.py` checks that every element of `H(l, j*(l)-1)` is `1 mod 3` (Theorem 17), that
+the set occupies a single class mod 9 (Proposition 20's containment plus Empirical Result 21's
 exclusion of the lower class), and that the class follows `class(l+1) = 4^(delta j*) class(l)`
 across every transition, plateau and double step included. Range: `l=5..16` (the paper cites this
-same range for Empirical Result 20). `mod9_containment_proof_check.py` independently checks
-Proposition 19's containment at `l=3,4` (outside `mod9_class_law.py`'s range) and the algebraic
+same range for Empirical Result 21). `mod9_containment_proof_check.py` independently checks
+Proposition 20's containment at `l=3,4` (outside `mod9_class_law.py`'s range) and the algebraic
 identity `{4^(J-1)+3, 4^(J-1)+6} = {4^J, 4^(J+1)} (mod 9)` the proposition's proof reduces to.
 
 `round5_secondary_closure.py` adds the near-extinction equality
-`H(l,J-1) = 2 { x in H(l,J-2) : x = 2 mod 3 }` (Empirical Result 18: the `subset` half is now
-Proposition 17, proven directly from Theorem 9 and Theorem 16; see `near_extinction_forward.py`
+`H(l,J-1) = 2 { x in H(l,J-2) : x = 2 mod 3 }` (Empirical Result 19: the `subset` half is now
+Proposition 18, proven directly from Theorem 10 and Theorem 17; see `near_extinction_forward.py`
 above), which passes at every `l=2..14`, and the counterexample to an unrestricted converse of the
 run-length bootstrap: `1547` lies in `2H(7,8) cap 4H(7,8)` yet is covered at budget 9, and both of
 its budget-9 witnesses span the full exponent range.
@@ -82,18 +82,18 @@ python3 round5_width_reformulation.py              # 15 seconds, l=3..13
 python3 corner_redundancy_tightness.py             # under a second, l=3..8
 ```
 
-`round5_width_reformulation.py` verifies Lemma 14's width dictionary against known holdout sizes,
+`round5_width_reformulation.py` verifies Lemma 15's width dictionary against known holdout sizes,
 the death-parity theorem, and the one-step identity `U(l,W+1) = U(l,W) u 2U(l,W) u Corner(l,W+1)`
-(Lemma 22). `|D(W+1)|` counts the values at width `W+1` that neither `U(l,W)` nor `2U(l,W)`
+(Lemma 23). `|D(W+1)|` counts the values at width `W+1` that neither `U(l,W)` nor `2U(l,W)`
 produces. It is zero at every `W >= 2l+1` for every `l=3..13`, which is the corner-redundancy
 property. The script also reports the boundary width `W = 2l` separately: it is zero (corner-
 redundancy holds there too) for `l=3,4,5,6`, then 1, 1, 2, 4, 4, 11, 9 for `l=7..13` (corner-
 redundancy fails there). See `corner_redundancy_tightness.py` below for what this boundary case
-buys: Proposition 23's tightness argument extends to it exactly where it is zero.
+buys: Proposition 24's tightness argument extends to it exactly where it is zero.
 
 Pass a different upper level as an argument, for example `python3 round5_width_reformulation.py 11`.
 
-`corner_redundancy_tightness.py` verifies Proposition 23 (corner-redundancy implies tightness) two
+`corner_redundancy_tightness.py` verifies Proposition 24 (corner-redundancy implies tightness) two
 ways: the set-level identity `D(l,W+1) = D(l,W) cap 2*D(l,W)` at every corner-redundant width, and
 the resulting exact `maxrun(H(l,j))` decrement-by-1 sequence from budget `j` down to `j*(l)`, for
 every `l+2 <= j <= j*(l)`, `l=3..8`. Both hold with zero exceptions.
@@ -106,7 +106,7 @@ python3 nonmonotone_coverage.py                    # under a second
 
 Pointwise coverage is not monotone in the budget. Residue `128368` modulo `3^13` is covered at
 budgets 13 and 14, not at 15 and 16, and again at 17. The script prints an explicit budget-14
-witness that can be checked by hand. Full coverage is still monotone, but only by Theorem 9.
+witness that can be checked by hand. Full coverage is still monotone, but only by Theorem 10.
 
 `maxrun_from_dump.py <dumpfile>` reports the maxrun and the mod-9 class content of any stored
 dump.

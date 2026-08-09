@@ -1,10 +1,10 @@
-# Section 4: the mean-payoff-game bound (Table 3, Theorem 4, Corollary 5)
+# Section 4: the mean-payoff-game bound (Table 3, Theorem 5, Corollary 6)
 
 The window-`k` relaxation of the covering budget is a mean-payoff game on the `2*3^(k-1)` unit
-states modulo `3^k`. Its value `rho_k` gives `j*(l) <= rho_k * l + C_k`. At `k=14`,
-`rho_14 = 9/8`, which is Corollary 5.
+states modulo `3^k`. A certified policy's rate `rho_k` gives `j*(l) <= rho_k * l + C_k`. At `k=14`,
+`rho_14 = 9/8` and `C_14 = 33/2`, which is Corollary 6: `j*(l) <= (9/8) l + 33/2`.
 
-Theorem 4 does not need the game's theory. It needs, for each `k`, one policy `sigma`, one value
+Theorem 5 does not need the game's theory. It needs, for each `k`, one policy `sigma`, one value
 `rho_k`, and one potential `h` satisfying
 
 ```
@@ -42,8 +42,15 @@ python3 mpg4.py 3 4 5 6 7 8 9        # nested Howard strategy improvement, exact
 ```
 
 `mpg4.py` writes `certificate_k<k>.json` on every run and prints `rho_k`, the adversary lower
-bound, and `C_k`. Upper and lower bound coincide at every `k`, which is what makes `rho_k` exact
-rather than merely an upper bound. Cost grows with `n = 2*3^(k-1)`: `k<=9` is minutes, `k=12`
+bound, and `C_k`. Upper and lower bound coincide at every `k`. `build_actions(k, dcap)` in
+`mpg3.py` caps the searched moves at `d <= dcap` (`mpg4.py` defaults `dcap=40`); every certified
+policy's actual maximum `d` stays far under that cap at every `k=3,...,14` (11 at `k=14`), but the
+cap means "upper bound equals lower bound" certifies `rho_k` exactly as the value of the game
+restricted to `d <= dcap`, not, without further argument, as the value of the full window-`k`
+game on `d < 2*3^k`. `verify_certificate.py`'s checks (legality, safety, the potential inequality)
+do not depend on the cap and are what the paper's Theorem 5 upper bound actually needs; only the
+"`rho_k` is the exact game value" framing is scoped to the capped game. See the paper's
+Section 4 discussion after Theorem 5. Cost grows with `n = 2*3^(k-1)`: `k<=9` is minutes, `k=12`
 about 76 minutes, `k=13` about 5.5 hours. `k=14` was run once, overnight.
 
 `mpg.py` is a second, Karp-based value-iteration solver, `O(n^2)` in memory, usable up to `k=7`:
@@ -52,7 +59,7 @@ about 76 minutes, `k=13` about 5.5 hours. `k=14` was run once, overnight.
 python3 mpg.py 3 4 5
 ```
 
-## Empirical Result 3 and the policy cross-check
+## Empirical Result 4 and the policy cross-check
 
 ```
 python3 step_a_grounding.py     # about 30 seconds
@@ -60,7 +67,7 @@ python3 step_a_grounding.py     # about 30 seconds
 
 reproduces `j*(l)` from the full-precision game against direct brute-force enumeration of
 `R_{j-1,j}` for `l=1..6`, and against the known table for `l=1..12`. That is the evidence behind
-Empirical Result 3, on which Theorem 4 is conditional.
+Empirical Result 4, on which Theorem 5 is conditional.
 
 ```
 python3 verify_on_real.py       # about 1 minute
