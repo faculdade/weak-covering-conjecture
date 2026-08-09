@@ -84,8 +84,10 @@ python3 corner_redundancy_tightness.py             # under a second, l=3..8
 the death-parity theorem, and the one-step identity `U(l,W+1) = U(l,W) u 2U(l,W) u Corner(l,W+1)`
 (Lemma 21). `|D(W+1)|` counts the values at width `W+1` that neither `U(l,W)` nor `2U(l,W)`
 produces. It is zero at every `W >= 2l+1` for every `l=3..13`, which is the corner-redundancy
-property. The boundary width `W = 2l` is the only place it fails, and the script reports that entry
-separately: 0 for `l<=6`, then 1, 1, 2, 4, 4, 11, 9 for `l=7..13`.
+property. The script also reports the boundary width `W = 2l` separately: it is zero (corner-
+redundancy holds there too) for `l=3,4,5,6`, then 1, 1, 2, 4, 4, 11, 9 for `l=7..13` (corner-
+redundancy fails there). See `corner_redundancy_tightness.py` below for what this boundary case
+buys: Proposition 22's tightness argument extends to it exactly where it is zero.
 
 Pass a different upper level as an argument, for example `python3 round5_width_reformulation.py 11`.
 
