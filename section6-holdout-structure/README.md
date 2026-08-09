@@ -50,9 +50,10 @@ exceed their parent's minimum Durfee depth by more than one, with the excess dis
 `{1: 1392, 3: 9, 5: 52, 7: 5}` and `{1: 4205, 3: 7, 5: 135, 7: 27}`, so the worst case is 7 at
 both transitions and 1 for about 95% of children.
 
-## Theorem 16, Proposition 18, Empirical Result 19, and the 1547 counterexample
+## Theorem 16, Proposition 17, Empirical Result 18, Proposition 19, Empirical Result 20, and the 1547 counterexample
 
 ```
+python3 near_extinction_forward.py                  # under a second, l=2..7
 python3 mod9_class_law.py                          # 9 seconds, l=5..16
 python3 mod9_containment_proof_check.py             # under a second, l=3,4 plus the algebraic identity
 python3 round5_secondary_closure.py                # 4 seconds, l=2..14
@@ -60,18 +61,19 @@ python3 mod9_forcing_analysis.py                   # 21 seconds, rewrites dumps/
 ```
 
 `mod9_class_law.py` checks that every element of `H(l, j*(l)-1)` is `1 mod 3` (Theorem 16), that
-the set occupies a single class mod 9 (Proposition 18's containment plus Empirical Result 19's
+the set occupies a single class mod 9 (Proposition 19's containment plus Empirical Result 20's
 exclusion of the lower class), and that the class follows `class(l+1) = 4^(delta j*) class(l)`
 across every transition, plateau and double step included. Range: `l=5..16` (the paper cites this
-same range for Empirical Result 19). `mod9_containment_proof_check.py` independently checks
-Proposition 18's containment at `l=3,4` (outside `mod9_class_law.py`'s range) and the algebraic
+same range for Empirical Result 20). `mod9_containment_proof_check.py` independently checks
+Proposition 19's containment at `l=3,4` (outside `mod9_class_law.py`'s range) and the algebraic
 identity `{4^(J-1)+3, 4^(J-1)+6} = {4^J, 4^(J+1)} (mod 9)` the proposition's proof reduces to.
 
 `round5_secondary_closure.py` adds the near-extinction equality
-`H(l,J-1) = 2 { x in H(l,J-2) : x = 2 mod 3 }` (Empirical Result 17), which passes at every
-`l=2..14`, and the counterexample to an unrestricted converse of the run-length bootstrap:
-`1547` lies in `2H(7,8) cap 4H(7,8)` yet is covered at budget 9, and both of its budget-9
-witnesses span the full exponent range.
+`H(l,J-1) = 2 { x in H(l,J-2) : x = 2 mod 3 }` (Empirical Result 18: the `subset` half is now
+Proposition 17, proven directly from Theorem 9 and Theorem 16; see `near_extinction_forward.py`
+above), which passes at every `l=2..14`, and the counterexample to an unrestricted converse of the
+run-length bootstrap: `1547` lies in `2H(7,8) cap 4H(7,8)` yet is covered at budget 9, and both of
+its budget-9 witnesses span the full exponent range.
 
 ## The width reformulation, corner-redundancy, and tightness (Section 7)
 
@@ -82,16 +84,16 @@ python3 corner_redundancy_tightness.py             # under a second, l=3..8
 
 `round5_width_reformulation.py` verifies Lemma 14's width dictionary against known holdout sizes,
 the death-parity theorem, and the one-step identity `U(l,W+1) = U(l,W) u 2U(l,W) u Corner(l,W+1)`
-(Lemma 21). `|D(W+1)|` counts the values at width `W+1` that neither `U(l,W)` nor `2U(l,W)`
+(Lemma 22). `|D(W+1)|` counts the values at width `W+1` that neither `U(l,W)` nor `2U(l,W)`
 produces. It is zero at every `W >= 2l+1` for every `l=3..13`, which is the corner-redundancy
 property. The script also reports the boundary width `W = 2l` separately: it is zero (corner-
 redundancy holds there too) for `l=3,4,5,6`, then 1, 1, 2, 4, 4, 11, 9 for `l=7..13` (corner-
 redundancy fails there). See `corner_redundancy_tightness.py` below for what this boundary case
-buys: Proposition 22's tightness argument extends to it exactly where it is zero.
+buys: Proposition 23's tightness argument extends to it exactly where it is zero.
 
 Pass a different upper level as an argument, for example `python3 round5_width_reformulation.py 11`.
 
-`corner_redundancy_tightness.py` verifies Proposition 22 (corner-redundancy implies tightness) two
+`corner_redundancy_tightness.py` verifies Proposition 23 (corner-redundancy implies tightness) two
 ways: the set-level identity `D(l,W+1) = D(l,W) cap 2*D(l,W)` at every corner-redundant width, and
 the resulting exact `maxrun(H(l,j))` decrement-by-1 sequence from budget `j` down to `j*(l)`, for
 every `l+2 <= j <= j*(l)`, `l=3..8`. Both hold with zero exceptions.
