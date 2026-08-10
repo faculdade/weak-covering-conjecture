@@ -61,8 +61,7 @@ The last three levels are expensive and are not meant to be re-run casually:
 | 22 | 84 GiB | 10,749 s | needed 500 GiB of swap |
 | 23 | 263 GiB | 375,615 s | about 104 hours |
 
-Three attempts at `l=24` failed before completion (two memory-policy kills, one apparent
-out-of-memory), which is why the table stops at 23.
+The table stops at `l=23`, the last level with a complete, verified result.
 
 `run` appends one line per settled budget to `checkpoints/progress_l<l>.txt` so a restart does
 not redo a budget already ruled out. Delete that folder for a run from scratch. There is no
