@@ -14,7 +14,7 @@ project notes, and reports it at depths c=8,9,10 for the exact
 last-holdout set H(l,j*(l)-1), l=10,...,15, the numbers cited in the
 paper.
 
-l=15 (m=19, T=C(38,19)=17,672,631,900) takes roughly 10-15 minutes on
+l=15 (m=19, T=C(38,19)=35,345,263,800) takes roughly 10-15 minutes on
 this project's machine; l=10..14 finish in well under a minute total.
 """
 from __future__ import annotations

@@ -78,11 +78,30 @@ The second checks that an FFT followed by an inverse FFT recovers all 387,420,48
 counts (maximum real error `2.8e-14`, zero rounding mismatches) and reports `max/RMS = 19.9746`
 against a Gaussian-phase heuristic of `6.3982`.
 
+## The constrained phase-scramble null
+
+```
+python3 constrained_phase_null.py --l 14 --m 16 --trials 30 --seed 777    # under a minute
+```
+
+The unconstrained scramble above does not preserve `F(z)=0` off units, so it is not the right null
+for that constraint on its own. This script builds one that does: `F` vanishing on the subgroup
+`3(Z/3^l Z)` is equivalent to `S(t1)+S(t2)+S(t3)=0` for every primitive-frequency triple
+`t = r, r+3^(l-1), r+2*3^(l-1)` (parent residue `r` modulo `3^(l-1)`, `3` not dividing `r`), three
+fixed magnitudes forming a closed triangle. For a generic (scalene) triple the phases are pinned
+down, up to a common rotation and an independent reflection (negating all three phases before
+rotating also sums to zero). The script draws both independently per triple, keeps every `|S(t)|`
+fixed, and vanishes off units exactly by construction (checked directly, not just consistent with
+the identity). Expected at `(l,m)=(14,16)`, seed `777`, 30 trials: `max/RMS_all` averaging `6.35`,
+range `[5.93,7.20]`, against the real array's `15.79`, a residual factor of about `2.49`. Both the
+zero-sum identity on the actual data and its exact preservation in the constructed null are checked
+and printed (`max|sum|` at the `1e-9`--`1e-11` scale against magnitudes near `10^4`).
+
 ## Local intensity of the last holdouts
 
 ```
 python3 local_intensity.py            # l=10..14, under a minute
-python3 local_intensity.py --with15   # adds l=15, roughly 10-15 minutes (T=17,672,631,900)
+python3 local_intensity.py --with15   # adds l=15, roughly 10-15 minutes (T=35,345,263,800)
 ```
 
 For each residue z, the depth-c cell is its class modulo `3^c`, and the depth-c local intensity

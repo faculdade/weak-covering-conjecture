@@ -72,19 +72,21 @@ full-state resume: killing the process loses the current attempt.
 
 ```
 python3 independent_jstar.py 21 21 30    # validated exactly against Table 1 for l=1..17;
-                                          # l=21 itself takes on the order of an hour, memory-bound
+                                          # confirms j*(21)=25 below
 ```
 
-`l=21..23` are new in this paper and, unlike `l<=20`, have no independent cross-check beyond
-agreement with a from-scratch Rust reimplementation carried forward by inference: the original
-Python implementation that validated `l<=20` (`experiment_wcc.py`, an earlier, separate project)
-is no longer available on this machine. `independent_jstar.py` is a fresh, from-scratch
-implementation, following the Rust DP's own documented recurrence (read from `src/main.rs`'s
-comments as a specification, not copied) but using native Python bignums as bitsets, a different
-representation and code path from the Rust `Vec<u64>` bitset. Validated exactly against Table 1,
-`l=1,...,17`, before being trusted for `l=21`. This is a real, if slow, independent check, not a
-placeholder: expect roughly an hour at `l=21`, dominated by Python bignum shift/OR cost, and about
-30 GiB resident.
+`l=21..23` are new in this paper. `l=22,23` have no independent cross-check beyond agreement with a
+from-scratch Rust reimplementation carried forward by inference: the original Python implementation
+that validated `l<=20` (`experiment_wcc.py`, an earlier, separate project) is no longer available on
+this machine. `independent_jstar.py` is a fresh, from-scratch implementation, following the Rust
+DP's own documented recurrence (read from `src/main.rs`'s comments as a specification, not copied)
+but using native Python bignums as bitsets, a different representation and code path from the Rust
+`Vec<u64>` bitset. Validated exactly against Table 1, `l=1,...,17`, before being trusted for `l=21`.
+
+`l=21` has since been run to completion and closes the gap at that level: `j=21` through `j=25`
+each matched the Rust DP's image sizes exactly, confirming `j*(21)=25` (image size `6973568802`,
+matching `|(Z/3^21 Z)^*| = 2*3^20`), in `13,484s` (about `3.75` hours), `30` GiB resident. `l=22,23`
+remain carried forward by inference only.
 
 ## Lemma "No smaller budget covers"
 
