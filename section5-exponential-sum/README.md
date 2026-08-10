@@ -106,6 +106,22 @@ from the construction: the zero-sum identity on the actual data and its preserva
 `777`, 30 trials: `max/RMS_all` averaging `6.35`, range `[5.93,7.20]`, against the real array's
 `15.79`, a residual factor of about `2.49`.
 
+## The local-intensity-only null
+
+```
+python3 multinomial_null.py --l 14 --m 16 --trials 30 --seed 2026    # under a minute
+```
+
+The constrained null above fixes every `|S(t)|` and carries no information about the level-`(l-1)`
+local intensity documented below. This script builds the opposite null, to test whether the
+observed `15.79` needs phase structure to explain it at all: keep each parent's count
+`N_{l-1}(r)` exactly as observed, and split it multinomially `(1/3,1/3,1/3)` among its three lifts,
+discarding every piece of phase information. Round 15 of this paper's critique loop found (Opus,
+independently reproduced before writing anything into the paper) that this local-intensity-only
+null gives `max/RMS_all` averaging `17.4`, range `[14.9,21.1]`, exceeding the actual `15.79` in about
+`83%` of trials: the observed extremity is comfortably consistent with local-intensity skew alone,
+removing the basis for attributing the phase-only null's departure to phase structure specifically.
+
 ## Local intensity of the last holdouts
 
 ```
