@@ -13,14 +13,28 @@ multinomially (1/3,1/3,1/3) among its three lifts, discarding all
 information about the observed primitive-frequency phases. This fixes the
 parent TOTAL, not the finer leave-one-out intensity used elsewhere in
 Section 5.3's rank check (a property of individual children, not of the
-parent total this null conditions on) -- do not conflate the two. If this
-null alone reproduces the actual array's max/RMS statistic, the observed
-extremity does not need phase structure to explain it: skew already
-present in the parent totals themselves is enough. (The lambda_c figures
-reported elsewhere in Section 5.3, from 2.0 to 108.4, come from a
-different family and depth, R_{j*(l)-2,j*(l)-1} at c=8,9,10 -- a related
-but separate measurement of the same qualitative phenomenon, not the same
-quantity as the parent totals this script uses.)
+parent total this null conditions on) -- do not conflate the two. (The
+lambda_c figures reported elsewhere in Section 5.3, from 2.0 to 108.4, come
+from a different family and depth, R_{j*(l)-2,j*(l)-1} at c=8,9,10 -- a
+related but separate measurement of the same qualitative phenomenon, not
+the same quantity as the parent totals this script uses.)
+
+Round 15 of this paper's critique loop read a max/RMS ratio match between
+this null (mean 17.4) and the actual array (15.79) as showing the observed
+extremity needs no phase structure to explain it. Round 16 (Opus,
+independently reproduced before touching the paper) found that reading was
+an artifact of comparing a scale-free ratio across two processes with
+different absolute scales. For each lift i of parent total N under this
+null, n_i is Binomial(N,1/3), so the imbalance 3*n_i-N has Var = 9*N*(1/3)*
+(2/3) = 2N; summing the 3 lifts of every parent gives
+E[sum_z F(z)^2] = 6T exactly, T=C(2m,m). The actual array's sum_z F(z)^2
+comes out at about 2.59 times that expectation, roughly a thousand null
+standard deviations away, and the null's absolute maximum never once
+reaches the actual array's absolute maximum across many independent
+trials. The ratio agreement is the quotient of two separate shortfalls
+(the null undershoots both the sum of squares and the maximum), not
+evidence that parent-total randomness alone reproduces the real data. This
+script reports the absolute quantities directly, not only the ratio.
 """
 from __future__ import annotations
 
@@ -35,6 +49,8 @@ from analyze_inverse import make_histogram
 def multinomial_null(l: int, m: int, trials: int, seed: int) -> None:
     q = 3**l
     q_parent = q // 3
+    total = math.comb(2 * m, m)
+    six_t = 6 * total
     hist = make_histogram(l, m).astype(np.int64)
     parents = hist[:q_parent] + hist[q_parent:2*q_parent] + hist[2*q_parent:]
 
@@ -44,13 +60,18 @@ def multinomial_null(l: int, m: int, trials: int, seed: int) -> None:
     actual_max = float(np.max(np.abs(lift_imbalance)))
     actual_rms = float(np.sqrt(np.mean(lift_imbalance**2)))
     actual_ratio = actual_max / actual_rms
+    actual_sumsq = float(np.sum(lift_imbalance**2))
     print(f"actual: max={actual_max:.6g} rms={actual_rms:.6g} "
-          f"ratio={actual_ratio:.6g}")
+          f"ratio={actual_ratio:.6g} sumsq={actual_sumsq:.6g}")
     print(f"parents: mean={parents.mean():.4f} max={parents.max()} "
           f"n={parents.size}")
+    print(f"T={total} 6T={six_t} sumsq/6T={actual_sumsq / six_t:.6g}")
 
     rng = np.random.default_rng(seed)
     ratios = []
+    sumsqs = []
+    maxes = []
+    rmses = []
     for _ in range(trials):
         n1 = rng.binomial(parents, 1.0 / 3.0)
         rem = parents - n1
@@ -61,16 +82,39 @@ def multinomial_null(l: int, m: int, trials: int, seed: int) -> None:
         max_sim = float(np.max(np.abs(sim_imbalance)))
         rms_sim = float(np.sqrt(np.mean(sim_imbalance**2)))
         ratios.append(max_sim / rms_sim)
+        sumsqs.append(float(np.sum(sim_imbalance**2)))
+        maxes.append(max_sim)
+        rmses.append(rms_sim)
 
     ratios = np.asarray(ratios)
+    sumsqs = np.asarray(sumsqs)
+    maxes = np.asarray(maxes)
+    rmses = np.asarray(rmses)
     print(
         f"multinomial (parent-total-conditioned) null ({trials} trials, "
-        f"seed={seed}): mean={float(np.mean(ratios)):.4f} "
+        f"seed={seed}): ratio mean={float(np.mean(ratios)):.4f} "
         f"range=[{float(np.min(ratios)):.4f},{float(np.max(ratios)):.4f}] "
         f"stderr={float(np.std(ratios) / math.sqrt(trials)):.4f}"
     )
     exceed = float(np.mean(ratios > actual_ratio))
     print(f"fraction of null trials exceeding the actual ratio: {exceed:.3f}")
+    print(
+        f"null sumsq: mean={float(np.mean(sumsqs)):.6g} "
+        f"sd={float(np.std(sumsqs)):.6g} "
+        f"(6T={six_t}, actual/6T={actual_sumsq / six_t:.4f}, "
+        f"actual sd-from-6T={((actual_sumsq - six_t) / float(np.std(sumsqs))):.1f})"
+    )
+    print(
+        f"null max: mean={float(np.mean(maxes)):.4f} sd={float(np.std(maxes)):.4f} "
+        f"max-over-trials={float(np.max(maxes)):.4f} "
+        f"(actual max {actual_max:.0f} exceeds null max in "
+        f"{int(np.sum(actual_max > maxes))}/{trials} trials)"
+    )
+    print(
+        f"null rms: mean={float(np.mean(rmses)):.4f} sd={float(np.std(rmses)):.4f} "
+        f"(actual/null-mean max shortfall={actual_max / float(np.mean(maxes)):.4f}, "
+        f"rms shortfall={actual_rms / float(np.mean(rmses)):.4f})"
+    )
 
 
 if __name__ == "__main__":

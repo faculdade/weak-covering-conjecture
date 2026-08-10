@@ -113,20 +113,39 @@ python3 multinomial_null.py --l 14 --m 16 --trials 30 --seed 2026    # under a m
 ```
 
 The constrained null above fixes every `|S(t)|` and carries no information about the level-`(l-1)`
-parent totals for this same family. This script builds the opposite null, to test whether the
-observed `15.79` needs phase structure to explain it at all: keep each parent's raw total
-`N_{l-1}(r)` exactly as observed, and split it multinomially `(1/3,1/3,1/3)` among its three lifts,
-discarding every piece of primitive-frequency phase information. This fixes the parent TOTAL, not
-the finer leave-one-out intensity used in `local_intensity_finest.py`'s rank check below (a property
-of individual children, not of the parent total this null conditions on); the two are related but
-distinct quantities, and the `lambda_c` figures reported there (from a different family and depth,
-`R_{j*(l)-2,j*(l)-1}` at `c=8,9,10`) are a separate measurement, not the same number as the parent
-totals used here. Round 15 of this paper's critique loop found (Opus,
-independently reproduced before writing anything into the paper) that this parent-total-conditioned
-null gives `max/RMS_all` averaging `17.4`, range `[14.9,21.1]`, exceeding the actual `15.79` in about
-`83%` of trials: the observed extremity is comfortably consistent with the skew already present in
-the parent totals themselves, removing the basis for attributing the phase-only null's departure to
-phase structure specifically.
+parent totals for this same family. This script builds the opposite null: keep each parent's raw
+total `N_{l-1}(r)` exactly as observed, and split it multinomially `(1/3,1/3,1/3)` among its three
+lifts, discarding every piece of primitive-frequency phase information. This fixes the parent TOTAL,
+not the finer leave-one-out intensity used in `local_intensity_finest.py`'s rank check below (a
+property of individual children, not of the parent total this null conditions on); the two are
+related but distinct quantities, and the `lambda_c` figures reported there (from a different family
+and depth, `R_{j*(l)-2,j*(l)-1}` at `c=8,9,10`) are a separate measurement, not the same number as
+the parent totals used here.
+
+Round 15 of this paper's critique loop read this null's `max/RMS_all` ratio, averaging `17.4`
+(range `[14.9,21.1]`, exceeding the actual `15.79` in about `83%` of trials), as showing the observed
+extremity needs no phase structure to explain it. Round 16 (Opus, independently reproduced before
+touching the paper) found that reading does not survive a look at the two absolute quantities the
+ratio divides. For each lift `i` of a parent total `N`, `n_i` is `Binomial(N,1/3)`, so the imbalance
+`3*n_i-N` has variance `2N`; summing three lifts per parent over the whole array gives the exact
+expectation `E[sum_z F(z)^2] = 6T`, `T=C(2m,m)`. At `(l,m)=(14,16)`, seed `2026`, 30 trials:
+
+```
+actual: max=698 rms=44.2145 ratio=15.7867 sumsq=9.35035e+09
+T=601080390 6T=3606482340 sumsq/6T=2.59265
+null sumsq: mean=3.60726e+09 sd=5.57254e+06 (actual sd-from-6T=1030.7)
+null max: mean=477.2667 sd=37.8118 max-over-trials=580.0 (actual max 698 exceeds null max in 30/30 trials)
+null rms: mean=27.4625 (max shortfall=1.4625, rms shortfall=1.6100)
+```
+
+The actual array's total energy is `2.59x` the null's own expectation, about `1031` of the null's own
+standard deviations away, and the null's absolute maximum never once reaches the actual array's `698`
+across the 30 trials (mean `477`, never above `580`). The `max/RMS` ratio agreement is the quotient of
+two separate shortfalls, the null undershooting both the sum of squares and the maximum by comparable
+factors (`1.61x` and `1.46x`), not evidence that parent-total randomness reproduces the real array.
+Read this way, the null does not remove the basis for attributing the observed extremity to structure
+beyond the parent totals; it adds to it, as a magnitude-driven excess distinct from the phase-only
+null's own, purely phase-driven departure above.
 
 ## Local intensity of the last holdouts
 
