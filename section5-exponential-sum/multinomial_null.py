@@ -1,20 +1,26 @@
 #!/usr/bin/env python3
-"""Local-intensity-only null for the l=14 phase-scramble diagnostic, Section 5.3.
+"""Parent-total-conditioned null for the l=14 phase-scramble diagnostic, Section 5.3.
 
 The constrained phase null (constrained_phase_null.py) fixes every |S(t)|,
-i.e. every piece of phase information, and asks whether the actual phases
-still look exchangeable once the zero-off-units constraint is respected.
-That null carries no information about the level-(l-1) local intensity
-documented earlier in Section 5.3 (lambda_c ranging from 2.0 to 108.4
-against a global mean in the thousands).
+i.e. every piece of primitive-frequency phase information, and asks whether
+the actual phases still look exchangeable once the zero-off-units
+constraint is respected. That null carries no information about the level-
+(l-1) parent totals for this same family, R_{15,16} at l=14.
 
-This script builds the opposite null: keep the level-(l-1) parent count
+This script builds the opposite null: keep each parent's raw total,
 N_{l-1}(r) exactly as observed, for every parent r, and split it
 multinomially (1/3,1/3,1/3) among its three lifts, discarding all
-information about the primitive-frequency phases. If this null alone
-reproduces the actual array's max/RMS statistic, the observed extremity
-does not need phase structure to explain it: pure local-intensity skew
-already accounts for it.
+information about the observed primitive-frequency phases. This fixes the
+parent TOTAL, not the finer leave-one-out intensity used elsewhere in
+Section 5.3's rank check (a property of individual children, not of the
+parent total this null conditions on) -- do not conflate the two. If this
+null alone reproduces the actual array's max/RMS statistic, the observed
+extremity does not need phase structure to explain it: skew already
+present in the parent totals themselves is enough. (The lambda_c figures
+reported elsewhere in Section 5.3, from 2.0 to 108.4, come from a
+different family and depth, R_{j*(l)-2,j*(l)-1} at c=8,9,10 -- a related
+but separate measurement of the same qualitative phenomenon, not the same
+quantity as the parent totals this script uses.)
 """
 from __future__ import annotations
 
@@ -58,7 +64,7 @@ def multinomial_null(l: int, m: int, trials: int, seed: int) -> None:
 
     ratios = np.asarray(ratios)
     print(
-        f"multinomial (local-intensity-only) null ({trials} trials, "
+        f"multinomial (parent-total-conditioned) null ({trials} trials, "
         f"seed={seed}): mean={float(np.mean(ratios)):.4f} "
         f"range=[{float(np.min(ratios)):.4f},{float(np.max(ratios)):.4f}] "
         f"stderr={float(np.std(ratios) / math.sqrt(trials)):.4f}"
