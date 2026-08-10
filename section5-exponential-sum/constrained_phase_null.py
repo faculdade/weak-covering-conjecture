@@ -13,9 +13,19 @@ t = r, r+3^(l-1), r+2*3^(l-1) satisfy S(t1)+S(t2)+S(t3) = 0.
 
 With |S(t1)|,|S(t2)|,|S(t3)| fixed at their actual values (which do sum to
 zero for some phase choice, since the real data achieves it), the solution
-space for a generic (scalene) triangle is exactly two families: a common
+space for a non-degenerate triangle is exactly two families: a common
 rotation of the actual phases, or a common rotation of their negation
 (mirror reflection). Both preserve the zero sum, verified below.
+
+F is real, so S(3^l-t) = conj(S(t)) must hold throughout (used already in
+the paper, Section 5.1). The conjugate partner of the triple at parent r is
+the triple at parent 3^(l-1)-r: only ONE triple per conjugate pair is given
+an independent rotation and reflection; the partner's three phases are set
+by conjugation, not drawn independently. Getting this wrong (randomizing
+every triple independently, ignoring the conjugate pairing) produces a
+complex-valued field and a materially different, wrong max/RMS statistic;
+both the real-valuedness and the exact conjugate-symmetry relation are
+checked directly below, not just assumed from the construction.
 """
 
 from __future__ import annotations
@@ -85,7 +95,24 @@ def constrained_scramble(l: int, m: int, trials: int, seed: int) -> None:
                 worst = max(worst, abs(randomized[t1] + randomized[t2] + randomized[t3]))
             print(f"constrained-null triple-sum check (trial 0): max|sum|={worst:.3e}")
 
-        random_delta = np.fft.ifft(randomized).real
+            # Conjugate symmetry S(q-t)=conj(S(t)) is what keeps the inverse
+            # transform real; check it directly over every entry actually
+            # set, not just assumed from how randomized[q-t] was assigned.
+            nonzero = np.flatnonzero(randomized)
+            conj_err = max(
+                abs(randomized[int(t)] - np.conjugate(randomized[(q - int(t)) % q]))
+                for t in nonzero
+            )
+            print(f"constrained-null conjugate-symmetry check (trial 0): "
+                  f"max|S(t)-conj(S(q-t))|={conj_err:.3e} over {nonzero.size} nonzero entries")
+
+        raw_delta = np.fft.ifft(randomized)
+        if trial == 0:
+            max_imag = float(np.max(np.abs(raw_delta.imag)))
+            max_real = float(np.max(np.abs(raw_delta.real)))
+            print(f"constrained-null real-valuedness check (trial 0): "
+                  f"max|Im|={max_imag:.3e} against max|Re|~{max_real:.3e}")
+        random_delta = raw_delta.real
         # Verify off-units vanishing directly.
         if trial == 0:
             off_units = random_delta[0::3]

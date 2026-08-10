@@ -88,14 +88,23 @@ The unconstrained scramble above does not preserve `F(z)=0` off units, so it is 
 for that constraint on its own. This script builds one that does: `F` vanishing on the subgroup
 `3(Z/3^l Z)` is equivalent to `S(t1)+S(t2)+S(t3)=0` for every primitive-frequency triple
 `t = r, r+3^(l-1), r+2*3^(l-1)` (parent residue `r` modulo `3^(l-1)`, `3` not dividing `r`), three
-fixed magnitudes forming a closed triangle. For a generic (scalene) triple the phases are pinned
+fixed magnitudes forming a closed, non-degenerate triangle. The phases are pinned
 down, up to a common rotation and an independent reflection (negating all three phases before
-rotating also sums to zero). The script draws both independently per triple, keeps every `|S(t)|`
-fixed, and vanishes off units exactly by construction (checked directly, not just consistent with
-the identity). Expected at `(l,m)=(14,16)`, seed `777`, 30 trials: `max/RMS_all` averaging `6.35`,
-range `[5.93,7.20]`, against the real array's `15.79`, a residual factor of about `2.49`. Both the
-zero-sum identity on the actual data and its exact preservation in the constructed null are checked
-and printed (`max|sum|` at the `1e-9`--`1e-11` scale against magnitudes near `10^4`).
+rotating also sums to zero). `F` is real, so `S(3^l-t)=conj(S(t))` must hold throughout; the
+conjugate partner of the triple at parent `r` is the triple at parent `3^(l-1)-r`. Only one triple
+per conjugate pair is given an independent rotation and reflection; the partner's phases are fixed
+by conjugation, not drawn on their own (getting this wrong, randomizing every triple independently
+and ignoring the pairing, gives a complex-valued field and a materially different, wrong statistic:
+`max/RMS_all` averaging `4.84` instead of `6.35`, caught in Round 14 of this paper's critique loop
+by both reviewers independently deriving the correct construction and finding the described-but-not-
+yet-checked version disagreed with it). The script keeps every `|S(t)|`
+fixed and vanishes off units exactly by construction. Checked and printed directly, not just assumed
+from the construction: the zero-sum identity on the actual data and its preservation in the null
+(`max|sum|` at the `1e-9`--`1e-11` scale against magnitudes near `10^4`), exact conjugate symmetry
+(`max|S(t)-conj(S(q-t))|=0` over every nonzero entry), and real-valuedness of the resulting field
+(`max|Im|` at the `1e-14` scale against a `max|Re|` near `10^2`). Expected at `(l,m)=(14,16)`, seed
+`777`, 30 trials: `max/RMS_all` averaging `6.35`, range `[5.93,7.20]`, against the real array's
+`15.79`, a residual factor of about `2.49`.
 
 ## Local intensity of the last holdouts
 
@@ -111,3 +120,19 @@ size). A non-homogeneous Poisson model fit to that intensity gives z hole probab
 `c=8,9,10`, every one of the eleven holdouts has `lambda_c` from `2.0` to `108.4` (hole probability
 `e^-2` to `e^-108`), against a global occupancy mean in the thousands over the same levels: every
 holdout sits in a systematically low-intensity cell, at every depth checked.
+
+```
+python3 local_intensity_finest.py          # l=10..14, expected-hole-count, under a minute
+python3 local_intensity_finest.py --rank   # l=12..14, rank check, a few minutes
+```
+
+`local_intensity.py` only checks `c=8,9,10`; at those depths the averaging class is large (`3^(l-c)`
+points) and dilutes local information. This script checks the finest depth the definition allows
+short of the degenerate case, `c=l-1` (a class of only `3` siblings), with each residue's own hit
+count excluded from its own intensity estimate (leave-one-out): without that exclusion, every
+residue's own estimate is biased by a class that small, not just holdouts'. Expected: total expected
+hole count `sum_z exp(-lambda_c(z))` meets or exceeds the actual holdout count at every level,
+`l=10,...,14` (`2.1` vs `2`, `3.5` vs `1`, `4.5` vs `3`, `5.3` vs `1`, `5.0` vs `3`). With `--rank`,
+ranking every unit by this intensity puts the actual holdouts deep in the low-intensity tail
+(`l=12,13,14`: ranks `12` to `582` among `354,294` to `3,188,646` units), though not always among the
+very lowest few by rank.
