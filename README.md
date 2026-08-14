@@ -52,3 +52,7 @@ stored dump, since the `l=21..23` state is too large to keep as a checked-in fil
 
 AMD Ryzen 7 5700U, 8 cores and 16 threads, 62 GiB RAM, no GPU. Every timing quoted in this
 repository was measured there.
+
+## Cite
+
+> Preprint: Tavares, R. A. (2026), Wirsching's Weak Covering Conjecture: An Extended Computation, a Conditional Bound, and the Structure of What Resists It. Figshare. DOI: 10.6084/m9.figshare.33260757.
